@@ -46,12 +46,15 @@ def resized(image):
         return image.resize((outputWidth, outputHeight))
 
 
-resizedLeft = resized(leftImage)
-resizedRight = resized(rightImage)
+def juxtapose(left, right):
+    juxtaposition = Image.new('RGBA', (left.width + right.width, max(left.height, right.height)))
 
-outputImage = Image.new('RGBA', (resizedLeft.width + resizedRight.width, outputHeight))
+    juxtaposition.paste(left, (0, 0))
+    juxtaposition.paste(right, (left.width, 0))
 
-outputImage.paste(resizedLeft, (0, 0))
-outputImage.paste(resizedRight, (resizedLeft.width, 0))
+    return juxtaposition
+
+
+outputImage = juxtapose(resized(leftImage), resized(rightImage))
 
 outputImage.save(outputFile)
