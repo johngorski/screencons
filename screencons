@@ -37,12 +37,14 @@ rightImage = Image.open(rightFile)
 
 outputHeight = min(leftImage.height, rightImage.height)
 
+
 def resized(image):
     if image.height == outputHeight:
         return image
     else:
         outputWidth = int(float(image.width) * float(outputHeight) / float(image.height))
         return image.resize((outputWidth, outputHeight))
+
 
 resizedLeft = resized(leftImage)
 resizedRight = resized(rightImage)
