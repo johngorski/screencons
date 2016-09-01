@@ -14,7 +14,7 @@ Usage:
 The left and right image files must already exist; the destination file must
 not. Common image file formats are supported (.png, .jpg, etc.).
 
-The extension of the destination file determines the file format ('out.jpg' wil
+The extension of the destination file determines the file format ('out.jpg' will
 be a JPEG, etc.).
 """
 
