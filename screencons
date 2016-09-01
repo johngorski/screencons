@@ -1,0 +1,55 @@
+#!/usr/bin/python
+
+from PIL import Image
+from os.path import abspath, exists
+from sys import argv, exit
+
+usage = """
+The screencons of two images is their horizontal juxtaposition after the taller 
+image has been resized to match the height of the shorter image.
+
+Usage:
+    screencons <left-image-file> <right-image-file> <destination-file>
+
+The left and right image files must already exist; the destination file must
+not. Common image file formats are supported (.png, .jpg, etc.).
+
+The extension of the destination file determines the file format ('out.jpg' wil
+be a JPEG, etc.).
+"""
+
+if len(argv) != 4:
+    print usage
+    exit()
+
+leftFile = abspath(argv[1])
+rightFile = abspath(argv[2])
+outputFile = abspath(argv[3])
+
+if exists(outputFile):
+    print "I'd rather you didn't use me to overwrite an existing image file."
+    print outputFile + " already exists."
+    print usage
+    exit()
+
+leftImage = Image.open(leftFile)
+rightImage = Image.open(rightFile)
+
+outputHeight = min(leftImage.height, rightImage.height)
+
+def resized(image):
+    if image.height == outputHeight:
+        return image
+    else:
+        outputWidth = int(float(image.width) * float(outputHeight) / float(image.height))
+        return image.resize((outputWidth, outputHeight))
+
+resizedLeft = resized(leftImage)
+resizedRight = resized(rightImage)
+
+outputImage = Image.new('RGBA', (resizedLeft.width + resizedRight.width, outputHeight))
+
+outputImage.paste(resizedLeft, (0, 0))
+outputImage.paste(resizedRight, (resizedLeft.width, 0))
+
+outputImage.save(outputFile)
